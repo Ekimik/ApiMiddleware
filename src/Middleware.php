@@ -4,6 +4,8 @@ namespace Ekimik\ApiMiddleware;
 
 use Ekimik\ApiUtils\Exception\ApiException;
 use Ekimik\ApiUtils\Resource\Response as ApiResponse;
+use function GuzzleHttp\Psr7\stream_for;
+use Nette\Utils\Json;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -20,13 +22,14 @@ abstract class Middleware {
             if ($e instanceof ApiException) {
                 $code = $e->getCode();
                 foreach ($e->getErrors() as $error) {
-                    $r->addError(['message' => $error]);
+                    $r->addError($error);
                 }
             }
 
             return $response
                 ->withStatus($code)
-                ->withJson($r->getResponse());
+                ->withHeader('Content-type', 'application/json')
+                ->withBody(stream_for(Json::encode($r->getResponse())));
         }
     }
 

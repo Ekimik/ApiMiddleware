@@ -19,7 +19,9 @@
     "php": ">=7",
     "psr/http-message": "^1.0",
     "ekimik/apiutils": "^4.3",
-    "ekimik/apidesc": "^1.3"
+    "ekimik/apidesc": "^1.3",
+    "guzzlehttp/psr7": "^1.5",
+    "nette/utils": "^2.5"
   },
   "require-dev": {
     "phpunit/phpunit": "6.0.0"

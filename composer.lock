@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6b3494acd628fb5076f1fd8e564364a8",
+    "content-hash": "29f4d8490f0ef09640a8b5c13d689f5f",
     "packages": [
         {
             "name": "ekimik/apidesc",
