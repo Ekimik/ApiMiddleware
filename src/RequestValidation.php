@@ -5,9 +5,10 @@ namespace Ekimik\ApiMiddleware;
 use Ekimik\ApiUtils\ActionValidator\IFactory;
 use Ekimik\ApiUtils\Exception\ApiException;
 use Ekimik\ApiUtils\Exception\ApiValidationException;
+use Ekimik\ApiUtils\Resource\Request;
 use Ekimik\ApiUtils\Security\RequestIntegrity;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as IResponse;
+use Psr\Http\Message\ServerRequestInterface as IRequest;
 
 class RequestValidation extends Middleware {
 
@@ -26,12 +27,12 @@ class RequestValidation extends Middleware {
     /**
      * @inheritdoc
      */
-    protected function execute(Request $request, Response $response, callable $next): Response {
+    protected function execute(IRequest $request, IResponse $response, callable $next): IResponse {
         if ($this->environment === 'production') {
             $this->integrityChecker->check($request);
         }
 
-        /** @var \Ekimik\ApiUtils\Resource\Request $apiRequest */
+        /** @var Request $apiRequest */
         $apiRequest = $request->getAttribute('apiRequest');
         if (empty($apiRequest)) {
             throw new ApiException(

@@ -5,12 +5,17 @@ namespace Ekimik\ApiMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-class CorsHeaders extends Middleware {
+class Cors extends Middleware {
 
     private $origin;
     private $headers;
     private $methods;
 
+    /**
+     * @param string $origin setting for Access-Control-Allow-Origin header
+     * @param array $headers setting for Access-Control-Allow-Headers
+     * @param array $methods setting for Access-Control-Allow-Methods
+     */
     public function __construct(string $origin, array $headers, array $methods) {
         $this->origin = $origin;
         $this->headers = $headers;

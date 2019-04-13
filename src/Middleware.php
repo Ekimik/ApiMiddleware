@@ -6,12 +6,12 @@ use Ekimik\ApiUtils\Exception\ApiException;
 use Ekimik\ApiUtils\Resource\Response as ApiResponse;
 use function GuzzleHttp\Psr7\stream_for;
 use Nette\Utils\Json;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as IRequest;
+use Psr\Http\Message\ResponseInterface as IResponse;
 
 abstract class Middleware {
 
-    public function __invoke(Request $request, Response $response, callable $next): Response {
+    public function __invoke(IRequest $request, IResponse $response, callable $next): IResponse {
         try {
             return $this->execute($request, $response, $next);
         } catch (\Throwable $e) {
@@ -34,12 +34,12 @@ abstract class Middleware {
     }
 
     /**
-     * @param Request $request
-     * @param Response $response
+     * @param IRequest $request
+     * @param IResponse $response
      * @param callable $next
-     * @return Response
+     * @return IResponse
      * @throws ApiException
      */
-    protected abstract function execute(Request $request, Response $response, callable $next): Response;
+    protected abstract function execute(IRequest $request, IResponse $response, callable $next): IResponse;
 
 }

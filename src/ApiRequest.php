@@ -5,8 +5,9 @@ namespace Ekimik\ApiMiddleware;
 use Ekimik\ApiDesc\ApiDescriptor;
 use Ekimik\ApiUtils\Exception\ApiException;
 use Ekimik\ApiUtils\InputData\Completion;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
+use Ekimik\ApiUtils\Resource\Request;
+use Psr\Http\Message\ResponseInterface as IResponse;
+use Psr\Http\Message\ServerRequestInterface as IRequest;
 
 class ApiRequest extends Middleware {
 
@@ -20,7 +21,7 @@ class ApiRequest extends Middleware {
     /**
      * @inheritdoc
      */
-    protected function execute(Request $request, Response $response, callable $next): Response {
+    protected function execute(IRequest $request, IResponse $response, callable $next): IResponse {
         $path = trim($request->getUri()->getPath(), '/');
         $action = $this->apiDesc->getAction($request->getMethod(), $path);
 
@@ -28,7 +29,7 @@ class ApiRequest extends Middleware {
             throw new ApiException('Unknown API action', 404);
         }
 
-        $apiRequest = new \Ekimik\ApiUtils\Resource\Request(
+        $apiRequest = new Request(
             $this->getInputData($request),
             $action,
             new Completion()
@@ -38,7 +39,7 @@ class ApiRequest extends Middleware {
         return $next($request, $response);
     }
 
-    private function getInputData(Request $request): array {
+    private function getInputData(IRequest $request): array {
         $method = $request->getMethod();
 
         if (in_array($method, ['GET', 'DELETE'])) {

@@ -2,8 +2,8 @@
 
 namespace Ekimik\ApiMiddleware;
 
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as IResponse;
+use Psr\Http\Message\ServerRequestInterface as IRequest;
 
 class Headers extends Middleware {
 
@@ -19,7 +19,7 @@ class Headers extends Middleware {
     /**
      * @inheritdoc
      */
-    protected function execute(Request $request, Response $response, callable $next): Response {
+    protected function execute(IRequest $request, IResponse $response, callable $next): IResponse {
         foreach ($this->headers as $name => $value) {
             $response = $response->withHeader($name, $value);
         }
