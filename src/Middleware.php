@@ -4,6 +4,7 @@ namespace Ekimik\ApiMiddleware;
 
 use Ekimik\ApiUtils\Exception\ApiException;
 use Ekimik\ApiUtils\Resource\Response as ApiResponse;
+use Ekimik\ApiUtils\Resource\ResponseBuilder;
 use function GuzzleHttp\Psr7\stream_for;
 use Nette\Utils\Json;
 use Psr\Http\Message\ServerRequestInterface as IRequest;
@@ -15,15 +16,11 @@ abstract class Middleware {
         try {
             return $this->execute($request, $response, $next);
         } catch (\Throwable $e) {
-            $r = new ApiResponse();
-            $r->addError(['message' => $e->getMessage()]);
-            $code = 500;
+			$r = ResponseBuilder::createErrorResponseFromException($e);
 
+            $code = 500;
             if ($e instanceof ApiException) {
                 $code = $e->getCode();
-                foreach ($e->getErrors() as $error) {
-                    $r->addError($error);
-                }
             }
 
             return $response
