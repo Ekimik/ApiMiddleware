@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "ekimik/apidesc",
-            "version": "1.5.1",
+            "version": "1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ekimik/ApiDesc.git",
-                "reference": "5aa5fce0b992150baadc930bee0c4c704e82f8b3"
+                "reference": "173d0a879afd233e4c76fc6a752c309b982d43a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ekimik/ApiDesc/zipball/5aa5fce0b992150baadc930bee0c4c704e82f8b3",
-                "reference": "5aa5fce0b992150baadc930bee0c4c704e82f8b3",
+                "url": "https://api.github.com/repos/Ekimik/ApiDesc/zipball/173d0a879afd233e4c76fc6a752c309b982d43a6",
+                "reference": "173d0a879afd233e4c76fc6a752c309b982d43a6",
                 "shasum": ""
             },
             "require": {
@@ -46,7 +46,7 @@
                 }
             ],
             "description": "Simple lib for describe some API",
-            "time": "2019-10-10T20:17:41+00:00"
+            "time": "2019-12-24T15:09:18+00:00"
         },
         {
             "name": "ekimik/apiutils",
@@ -139,16 +139,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "6.5.1",
+            "version": "6.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "0274c05370a7bc9bb3a33838858253418bd7d14b"
+                "reference": "43ece0e75098b7ecd8d13918293029e555a50f82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/0274c05370a7bc9bb3a33838858253418bd7d14b",
-                "reference": "0274c05370a7bc9bb3a33838858253418bd7d14b",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/43ece0e75098b7ecd8d13918293029e555a50f82",
+                "reference": "43ece0e75098b7ecd8d13918293029e555a50f82",
                 "shasum": ""
             },
             "require": {
@@ -202,7 +202,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2019-12-21T08:51:15+00:00"
+            "time": "2019-12-23T11:57:10+00:00"
         },
         {
             "name": "guzzlehttp/promises",

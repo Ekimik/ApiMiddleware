@@ -96,8 +96,9 @@ class RequestValidationTest extends TestCase {
      * @covers RequestValidation
      */
     public function testExecutionRequestNotValid() {
-        $r = new ServerRequest('GET', 'http://www.example.com/foo/bar');
         $apiRequest = new Request([], new Action('foo/bar', 'GET'), new Completion());
+
+        $r = new ServerRequest('GET', 'http://www.example.com/foo/bar');
         $r = $r->withAttribute('apiRequest', $apiRequest);
 
         /** @var IResponse $response */
@@ -108,12 +109,34 @@ class RequestValidationTest extends TestCase {
         $this->assertTrue(Strings::contains($body, "Foo error"));
     }
 
+	/**
+	 * @covers RequestValidation
+	 */
+	public function testExecutionRequestHeadersNotValid() {
+		$action = new Action('foo/bar', 'GET');
+		$action->addHeader('Foo-Header');
+		$apiRequest = new Request([], $action, new Completion());
+
+		$r = new ServerRequest('GET', 'http://www.example.com/foo/bar', ['Bar-Header' => 'foobar']);
+		$r = $r->withAttribute('apiRequest', $apiRequest);
+
+		/** @var IResponse $response */
+		$response = call_user_func($this->middleware, $r, new Response(), $this->nextCb);
+		$this->assertEquals(422, $response->getStatusCode());
+		$body = $response->getBody()->getContents();
+		$this->assertTrue(Strings::contains($body, "Validation of input data failed, see 'errors' for more info"));
+		$this->assertTrue(Strings::contains($body, "Required header 'Foo-Header' is missing"));
+	}
+
     /**
      * @covers RequestValidation
      */
     public function testExecution() {
-        $r = new ServerRequest('GET', 'http://www.example.com/foo/bar');
-        $apiRequest = new Request([], new Action('foo/bar', 'GET'), new Completion());
+		$action = new Action('foo/bar', 'GET');
+		$action->addHeader('Foo-Header');
+        $apiRequest = new Request([], $action, new Completion());
+
+        $r = new ServerRequest('GET', 'http://www.example.com/foo/bar', ['Foo-Header' => 'foobar']);
         $r = $r->withAttribute('apiRequest', $apiRequest);
 
         /** @var IResponse $response */

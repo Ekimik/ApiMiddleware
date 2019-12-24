@@ -34,24 +34,49 @@ class RequestValidation extends Middleware {
 
         /** @var Request $apiRequest */
         $apiRequest = $request->getAttribute('apiRequest');
-        if (empty($apiRequest)) {
+        if (empty($apiRequest) && !$apiRequest instanceof Request) {
             throw new ApiException(
                 "Attribute 'apiRequest' cannot be found in request object, did you add " . ApiRequest::class . " middleware to your stack?",
                 500
             );
         }
 
-        $action = $apiRequest->getAction();
-        $actionValidator = $this->actionValidatorFactory->create($action);
-        $actionValidator->validate($request->getAttribute('apiRequest'));
-
-        if (!$actionValidator->isValid()) {
-            throw new ApiValidationException(
-                "Validation of input data failed, see 'errors' for more info",
-                $actionValidator->getErrors()
-            );
-        }
+		$this->validateHeaders($request);
+        $this->validateData($request);
 
         return $next($request, $response);
     }
+
+    private function validateHeaders(IRequest $request) {
+		/** @var Request $apiRequest */
+		$apiRequest = $request->getAttribute('apiRequest');
+		$action = $apiRequest->getAction();
+
+		$headers = $action->getHeaders();
+		$errors = [];
+		foreach ($headers as $headerDef) {
+			if ($headerDef['required'] && !$request->hasHeader($headerDef['name'])) {
+				$errors[] = ['message' => "Required header '{$headerDef['name']}' is missing"];
+			}
+		}
+
+		if (!empty($errors)) {
+			throw new ApiValidationException("Validation of input data failed, see 'errors' for more info", $errors);
+		}
+	}
+
+	private function validateData(IRequest $request) {
+		/** @var Request $apiRequest */
+		$apiRequest = $request->getAttribute('apiRequest');
+
+		$action = $apiRequest->getAction();
+		$actionValidator = $this->actionValidatorFactory->create($action);
+		$actionValidator->validate($apiRequest);
+
+		if (!$actionValidator->isValid()) {
+			$errors = $actionValidator->getErrors();
+			throw new ApiValidationException("Validation of input data failed, see 'errors' for more info", $errors);
+		}
+	}
+
 }
